@@ -61,6 +61,55 @@ function getfromSessionStorage() {
 
 }
 
+// Function to fetch 7-day forecast using One Call API
+async function fetchSevenDayForecast(lat, lon) {
+    try {
+        const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${API_KEY}&units=metric`
+        );
+        const data = await response.json();
+        renderSevenDayForecast(data.daily);
+    } catch (err) {
+        console.error("Error fetching 7-day forecast:", err);
+        // Handle errors as needed
+    }
+}
+
+// Function to render 7-day forecast in the UI
+function renderSevenDayForecast(dailyForecast) {
+    const forecastContainer = document.getElementById("forecast-container");
+    forecastContainer.innerHTML = ''; // Clear any existing content
+
+    dailyForecast.slice(1, 8).forEach(day => { // Get next 7 days
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("forecast-day");
+
+        const date = new Date(day.dt * 1000);
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        const dateString = date.toLocaleDateString(undefined, options);
+
+        const dateP = document.createElement("p");
+        dateP.textContent = dateString;
+
+        const icon = document.createElement("img");
+        icon.src = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+        icon.alt = day.weather[0].description;
+
+        const temp = document.createElement("p");
+        temp.textContent = `${Math.round(day.temp.day)}°C`;
+
+        const description = document.createElement("p");
+        description.textContent = day.weather[0].description;
+
+        dayDiv.appendChild(dateP);
+        dayDiv.appendChild(icon);
+        dayDiv.appendChild(temp);
+        dayDiv.appendChild(description);
+
+        forecastContainer.appendChild(dayDiv);
+    });
+}
+
 async function fetchUserWeatherInfo(coordinates) {
     const {lat, lon} = coordinates;
     // make grantcontainer invisible
@@ -78,6 +127,9 @@ async function fetchUserWeatherInfo(coordinates) {
         loadingScreen.classList.remove("active");
         userInfoContainer.classList.add("active");
         renderWeatherInfo(data);
+
+        // Fetch and render 7-day forecast
+        fetchSevenDayForecast(lat, lon);
     }
     catch(err) {
         loadingScreen.classList.remove("active");
@@ -105,7 +157,7 @@ function renderWeatherInfo(weatherInfo) {
     cityName.innerText = weatherInfo?.name;
     countryIcon.src = `https://flagcdn.com/144x108/${weatherInfo?.sys?.country.toLowerCase()}.png`;
     desc.innerText = weatherInfo?.weather?.[0]?.description;
-    weatherIcon.src = `http://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
+    weatherIcon.src = `https://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
     temp.innerText = `${weatherInfo?.main?.temp} °C`;
     windspeed.innerText = `${weatherInfo?.wind?.speed} m/s`;
     humidity.innerText = `${weatherInfo?.main?.humidity}%`;

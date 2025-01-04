@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather App</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,86 +17,84 @@
         <h1>Weather App</h1>
 
         <div class="tab-container">
-            <p class="tab" data-userWeather>Your Weather</p>
+            <p class="tab current-tab" data-userWeather>Your Weather</p>
             <p class="tab" data-searchWeather>Search Weather</p>
         </div>
 
         <div class="weather-container">
 
-            <!-- grant location container-->
+            <!-- Grant Location Container -->
             <div class="sub-container grant-location-container">
-                <img src="./assets/location.png" width="80" height="80" loading="lazy">
+                <img src="./assets/location.png" alt="Location Icon">
                 <p>Grant Location Access</p>
-                <p>Allow Access to get weather Information</p>
-                <button class="btn" data-grantAccess>Grant Access</button>
+                <p>Allow access to get accurate weather information based on your location.</p>
+                <button class="btn" data-grantAccess>Grant</button>
             </div>
 
-            <!-- search form -> form-container-->
+            <!-- Search Form -->
             <form class="form-container" data-searchForm>
-                <input placeholder="Search for City..." data-searchInput>
-                <button class="btn" type="submit">
-                    <img src="./assets/search.png"  width="20" height="20" loading="lazy">
+                <input type="text" placeholder="Enter city name..." data-searchInput aria-label="Search for city">
+                <button class="btn" type="submit" title="Search">
+                    <img src="./assets/search.png" alt="Search Icon">
                 </button>
             </form>
 
-            <!--- loading screen container -->
+            <!-- Loading Screen Container -->
             <div class="sub-container loading-container">
-                <img src="./assets/loading.gif" width="150" height="150">
-                <p>Loading</p>
+                <img src="./assets/loading.gif" alt="Loading">
+                <p>Loading...</p>
             </div>
 
-            <!-- show weather info -->
+            <!-- User Info Container -->
             <div class="sub-container user-info-container">
 
-                <!--city name and Flag-->
+                <!-- Name and Country -->
                 <div class="name">
-                    <p data-cityName></p>
-                    <img data-countryIcon>
+                    <p data-cityName>City Name</p>
+                    <img data-countryIcon alt="Country Flag">
                 </div>
 
-                <!-- weather descriptuion-->
-                <p data-weatherDesc></p>
-                <!--weather Icon-->
-                <img data-weatherIcon>
-                <!--temperature-->
-                <p data-temp></p>
+                <!-- Description and Icon -->
+                <p data-weatherDesc>Clear Sky</p>
+                <img data-weatherIcon alt="Weather Icon">
+                <p data-temp>25°C</p>
 
-                <!--3 cards - parameters-->
+                <!-- Parameters Container -->
                 <div class="parameter-container">
 
-                    <!--card 1-->
+                    <!-- Wind Speed -->
                     <div class="parameter">
-                        <img src="./assets/wind.png" >
-                        <p>windspeed</p>
-                        <p data-windspeed></p>
+                        <img src="./assets/wind.png" alt="Wind Icon">
+                        <p>Windspeed</p>
+                        <p data-windspeed>5 m/s</p>
                     </div>
 
-                    <!--card 2-->
+                    <!-- Humidity -->
                     <div class="parameter">
-                        <img src="./assets/humidity.png" >
-                        <p>humidity</p>
-                        <p data-humidity></p>
+                        <img src="./assets/humidity.png" alt="Humidity Icon">
+                        <p>Humidity</p>
+                        <p data-humidity>60%</p>
                     </div>
 
-                    <!--card 3-->
+                    <!-- Cloudiness -->
                     <div class="parameter">
-                        <img src="./assets/cloud.png" >
+                        <img src="./assets/cloud.png" alt="Cloud Icon">
                         <p>Clouds</p>
-                        <p data-cloudiness></p>
+                        <p data-cloudiness>20%</p>
                     </div>
 
                 </div>
 
+                <!-- 7-Day Forecast Container -->
+                <div class="forecast-container" id="forecast-container">
+                    <!-- Forecast days will be dynamically inserted here -->
+                </div>
 
             </div>
-
-
 
         </div>
 
-
     </div>
-
 
     <script src="script.js"></script>
 </body>
