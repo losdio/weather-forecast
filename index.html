@@ -31,6 +31,16 @@
                 <button class="btn" data-grantAccess>Grant</button>
             </div>
 
+            <!-- Add F/C Toggle Container above the Search Form -->
+            <div class="unit-toggle-container">
+                <span class="unit-label">°C</span>
+                <label class="switch">
+                    <input type="checkbox" id="unit-toggle" title="Toggle between Celsius and Fahrenheit">
+                    <span class="slider round"></span>
+                </label>
+                <span class="unit-label">°F</span>
+            </div>
+
             <!-- Search Form -->
             <form class="form-container" data-searchForm>
                 <input type="text" placeholder="Enter city name..." data-searchInput aria-label="Search for city">
@@ -85,9 +95,17 @@
 
                 </div>
 
-                <!-- 7-Day Forecast Container -->
-                <div class="forecast-container" id="forecast-container">
-                    <!-- Forecast days will be dynamically inserted here -->
+                <!-- Add Separate Containers for Sunrise, Sunset, and Golden Hour -->
+                <div class="sunrise-container">
+                    <p data-sunrise>Sunrise: --:--</p>
+                </div>
+
+                <div class="sunset-container">
+                    <p data-sunset>Sunset: --:--</p>
+                </div>
+
+                <div class="golden-hour-container">
+                    <p data-goldenHour>Golden Hour: --:-- - --:--</p>
                 </div>
 
             </div>

@@ -10,7 +10,7 @@ const userInfoContainer = document.querySelector(".user-info-container");
 //initially vairables need????
 
 let oldTab = userTab;
-const API_KEY = "d1845658f92b31c64bd94f06f7188c9c";
+const API_KEY = "d201d31de429e3ae541ac87b5e523642";
 oldTab.classList.add("current-tab");
 getfromSessionStorage();
 
@@ -61,55 +61,6 @@ function getfromSessionStorage() {
 
 }
 
-// Function to fetch 7-day forecast using One Call API
-async function fetchSevenDayForecast(lat, lon) {
-    try {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${API_KEY}&units=metric`
-        );
-        const data = await response.json();
-        renderSevenDayForecast(data.daily);
-    } catch (err) {
-        console.error("Error fetching 7-day forecast:", err);
-        // Handle errors as needed
-    }
-}
-
-// Function to render 7-day forecast in the UI
-function renderSevenDayForecast(dailyForecast) {
-    const forecastContainer = document.getElementById("forecast-container");
-    forecastContainer.innerHTML = ''; // Clear any existing content
-
-    dailyForecast.slice(1, 8).forEach(day => { // Get next 7 days
-        const dayDiv = document.createElement("div");
-        dayDiv.classList.add("forecast-day");
-
-        const date = new Date(day.dt * 1000);
-        const options = { weekday: 'short', month: 'short', day: 'numeric' };
-        const dateString = date.toLocaleDateString(undefined, options);
-
-        const dateP = document.createElement("p");
-        dateP.textContent = dateString;
-
-        const icon = document.createElement("img");
-        icon.src = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
-        icon.alt = day.weather[0].description;
-
-        const temp = document.createElement("p");
-        temp.textContent = `${Math.round(day.temp.day)}°C`;
-
-        const description = document.createElement("p");
-        description.textContent = day.weather[0].description;
-
-        dayDiv.appendChild(dateP);
-        dayDiv.appendChild(icon);
-        dayDiv.appendChild(temp);
-        dayDiv.appendChild(description);
-
-        forecastContainer.appendChild(dayDiv);
-    });
-}
-
 async function fetchUserWeatherInfo(coordinates) {
     const {lat, lon} = coordinates;
     // make grantcontainer invisible
@@ -127,9 +78,6 @@ async function fetchUserWeatherInfo(coordinates) {
         loadingScreen.classList.remove("active");
         userInfoContainer.classList.add("active");
         renderWeatherInfo(data);
-
-        // Fetch and render 7-day forecast
-        fetchSevenDayForecast(lat, lon);
     }
     catch(err) {
         loadingScreen.classList.remove("active");
@@ -139,7 +87,15 @@ async function fetchUserWeatherInfo(coordinates) {
 
 }
 
+/* Add a global variable to store weather data */
+let weatherData = null;
+
 function renderWeatherInfo(weatherInfo) {
+    console.log("renderWeatherInfo called with:", weatherInfo); // Debugging log
+
+    // Store the fetched weather data
+    weatherData = weatherInfo;
+
     //fistly, we have to fethc the elements 
 
     const cityName = document.querySelector("[data-cityName]");
@@ -157,13 +113,38 @@ function renderWeatherInfo(weatherInfo) {
     cityName.innerText = weatherInfo?.name;
     countryIcon.src = `https://flagcdn.com/144x108/${weatherInfo?.sys?.country.toLowerCase()}.png`;
     desc.innerText = weatherInfo?.weather?.[0]?.description;
-    weatherIcon.src = `https://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
+    weatherIcon.src = `https://openweathermap.org/img/wn/${weatherInfo?.weather?.[0]?.icon}@2x.png`;
     temp.innerText = `${weatherInfo?.main?.temp} °C`;
     windspeed.innerText = `${weatherInfo?.wind?.speed} m/s`;
     humidity.innerText = `${weatherInfo?.main?.humidity}%`;
     cloudiness.innerText = `${weatherInfo?.clouds?.all}%`;
 
+    // Display sunrise and sunset times
+    const sunriseElement = document.querySelector("[data-sunrise]");
+    const sunsetElement = document.querySelector("[data-sunset]");
+    const goldenHourElement = document.querySelector("[data-goldenHour]");
 
+    if (sunriseElement && sunsetElement && goldenHourElement) {
+        console.log("Sunrise, Sunset, Golden Hour elements found"); // Debugging log
+
+        const sunriseTime = new Date(weatherInfo.sys.sunrise * 1000);
+        const sunsetTime = new Date(weatherInfo.sys.sunset * 1000);
+
+        sunriseElement.innerText = `Sunrise: ${sunriseTime.toLocaleTimeString()}`;
+        sunsetElement.innerText = `Sunset: ${sunsetTime.toLocaleTimeString()}`;
+
+        // Calculate Golden Hour (1 hour after sunrise and 1 hour before sunset)
+        const goldenHourStart = new Date(sunriseTime.getTime() + 60 * 60 * 1000);
+        const goldenHourEnd = new Date(sunsetTime.getTime() - 60 * 60 * 1000);
+
+        goldenHourElement.innerText = `Golden Hour:\n${goldenHourStart.toLocaleTimeString()} - ${goldenHourEnd.toLocaleTimeString()}`;
+    } else {
+        console.error("Sunrise, Sunset, and/or Golden Hour elements not found in the DOM");
+    }
+
+    // Update temperature display based on current unit
+    const tempCelsius = weatherInfo?.main?.temp;
+    updateTemperatureDisplays(tempCelsius);
 }
 
 function getLocation() {
@@ -220,3 +201,45 @@ async function fetchSearchWeatherInfo(city) {
         //hW
     }
 }
+
+/* Select the unit toggle elements */
+const unitToggle = document.getElementById("unit-toggle");
+const unitLabels = document.querySelectorAll(".unit-label");
+
+/* Set default unit to Celsius */
+let currentUnit = 'C';
+
+/* Check if there's a saved unit preference in sessionStorage */
+if (sessionStorage.getItem("preferred-unit")) {
+    currentUnit = sessionStorage.getItem("preferred-unit");
+    if (currentUnit === 'F') {
+        unitToggle.checked = true;
+    }
+}
+
+/* Function to convert Celsius to Fahrenheit */
+function celsiusToFahrenheit(tempC) {
+    return (tempC * 9/5) + 32;
+}
+
+/* Function to update temperature displays based on selected unit */
+function updateTemperatureDisplays(tempC) {
+    const tempElement = document.querySelector("[data-temp]");
+    if (currentUnit === 'F') {
+        const tempF = celsiusToFahrenheit(tempC);
+        tempElement.innerText = `${Math.round(tempF)}°F`;
+    } else {
+        tempElement.innerText = `${Math.round(tempC)}°C`;
+    }
+}
+
+/* Event Listener for Unit Toggle */
+unitToggle.addEventListener("change", () => {
+    currentUnit = unitToggle.checked ? 'F' : 'C';
+    sessionStorage.setItem("preferred-unit", currentUnit);
+    // Update temperature display without re-fetching the data
+    if (weatherData) {
+        const tempCelsius = weatherData.main.temp;
+        updateTemperatureDisplays(tempCelsius);
+    }
+});
