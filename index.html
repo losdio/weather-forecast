@@ -1,119 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="wrapper">
+      <h1>Weather App</h1>
 
-        <h1>Weather App</h1>
+      <div class="tab-container">
+        <p class="tab current-tab" data-userWeather>Your Weather</p>
+        <p class="tab" data-searchWeather>Search Weather</p>
+      </div>
 
-        <div class="tab-container">
-            <p class="tab current-tab" data-userWeather>Your Weather</p>
-            <p class="tab" data-searchWeather>Search Weather</p>
+      <div class="weather-container">
+        <div class="sub-container grant-location-container">
+          <img src="./assets/location.png" alt="Location Icon" />
+          <p>Grant Location Access</p>
+          <p>
+            Allow access to get accurate weather information based on your
+            location.
+          </p>
+          <button class="btn" data-grantAccess>Grant</button>
         </div>
 
-        <div class="weather-container">
-
-            <!-- Grant Location Container -->
-            <div class="sub-container grant-location-container">
-                <img src="./assets/location.png" alt="Location Icon">
-                <p>Grant Location Access</p>
-                <p>Allow access to get accurate weather information based on your location.</p>
-                <button class="btn" data-grantAccess>Grant</button>
-            </div>
-
-            <!-- Add F/C Toggle Container above the Search Form -->
-            <div class="unit-toggle-container">
-                <span class="unit-label">°C</span>
-                <label class="switch">
-                    <input type="checkbox" id="unit-toggle" title="Toggle between Celsius and Fahrenheit">
-                    <span class="slider round"></span>
-                </label>
-                <span class="unit-label">°F</span>
-            </div>
-
-            <!-- Search Form -->
-            <form class="form-container" data-searchForm>
-                <input type="text" placeholder="Enter city name..." data-searchInput aria-label="Search for city">
-                <button class="btn" type="submit" title="Search">
-                    <img src="./assets/search.png" alt="Search Icon">
-                </button>
-            </form>
-
-            <!-- Loading Screen Container -->
-            <div class="sub-container loading-container">
-                <img src="./assets/loading.gif" alt="Loading">
-                <p>Loading...</p>
-            </div>
-
-            <!-- User Info Container -->
-            <div class="sub-container user-info-container">
-
-                <!-- Name and Country -->
-                <div class="name">
-                    <p data-cityName>City Name</p>
-                    <img data-countryIcon alt="Country Flag">
-                </div>
-
-                <!-- Description and Icon -->
-                <p data-weatherDesc>Clear Sky</p>
-                <img data-weatherIcon alt="Weather Icon">
-                <p data-temp>25°C</p>
-
-                <!-- Parameters Container -->
-                <div class="parameter-container">
-
-                    <!-- Wind Speed -->
-                    <div class="parameter">
-                        <img src="./assets/wind.png" alt="Wind Icon">
-                        <p>Windspeed</p>
-                        <p data-windspeed>5 m/s</p>
-                    </div>
-
-                    <!-- Humidity -->
-                    <div class="parameter">
-                        <img src="./assets/humidity.png" alt="Humidity Icon">
-                        <p>Humidity</p>
-                        <p data-humidity>60%</p>
-                    </div>
-
-                    <!-- Cloudiness -->
-                    <div class="parameter">
-                        <img src="./assets/cloud.png" alt="Cloud Icon">
-                        <p>Clouds</p>
-                        <p data-cloudiness>20%</p>
-                    </div>
-
-                </div>
-
-                <!-- Add Separate Containers for Sunrise, Sunset, and Golden Hour -->
-                <div class="sunrise-container">
-                    <p data-sunrise>Sunrise: --:--</p>
-                </div>
-
-                <div class="sunset-container">
-                    <p data-sunset>Sunset: --:--</p>
-                </div>
-
-                <div class="golden-hour-container">
-                    <p data-goldenHour>Golden Hour: --:-- - --:--</p>
-                </div>
-
-            </div>
-
+        <div class="unit-toggle-container">
+          <span class="unit-label">°C</span>
+          <label class="switch">
+            <input
+              type="checkbox"
+              id="unit-toggle"
+              title="Toggle between Celsius and Fahrenheit"
+            />
+            <span class="slider round"></span>
+          </label>
+          <span class="unit-label">°F</span>
         </div>
 
+        <form class="form-container" data-searchForm>
+          <input
+            type="text"
+            placeholder="Enter city name..."
+            data-searchInput
+            aria-label="Search for city"
+          />
+          <button class="btn" type="submit" title="Search">
+            <img src="./assets/search.png" alt="Search Icon" />
+          </button>
+        </form>
+
+        <div class="sub-container loading-container">
+          <img src="./assets/loading.gif" alt="Loading" />
+          <p>Loading...</p>
+        </div>
+
+        <div class="sub-container user-info-container">
+          <div class="name">
+            <p data-cityName>City Name</p>
+            <img data-countryIcon alt="Country Flag" />
+          </div>
+
+          <p data-weatherDesc>Clear Sky</p>
+          <img data-weatherIcon alt="Weather Icon" />
+          <p data-temp>25°C</p>
+
+          <div class="parameter-container">
+            <div class="parameter">
+              <img src="./assets/wind.png" alt="Wind Icon" />
+              <p>Windspeed</p>
+              <p data-windspeed>5 m/s</p>
+            </div>
+
+            <div class="parameter">
+              <img src="./assets/humidity.png" alt="Humidity Icon" />
+              <p>Humidity</p>
+              <p data-humidity>60%</p>
+            </div>
+
+            <div class="parameter">
+              <img src="./assets/cloud.png" alt="Cloud Icon" />
+              <p>Clouds</p>
+              <p data-cloudiness>20%</p>
+            </div>
+          </div>
+
+          <div class="sunrise-container">
+            <p data-sunrise>Sunrise: --:--</p>
+          </div>
+
+          <div class="sunset-container">
+            <p data-sunset>Sunset: --:--</p>
+          </div>
+
+          <div class="golden-hour-container">
+            <p data-goldenHour>Golden Hour: --:-- - --:--</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
